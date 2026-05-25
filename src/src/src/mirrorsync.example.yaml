@@ -1,0 +1,26 @@
+name: prod-to-staging
+
+source:
+  dsn: postgresql://user:password@prod-host:5432/production_db
+
+target:
+  dsn: postgresql://user:password@staging-host:5432/staging_db
+
+mode: incremental
+direction: source_to_target
+conflict_strategy: latest_wins
+
+batch_size: 1000
+max_retries: 3
+
+tables:
+  - users
+  - products
+  - orders
+  - order_items
+
+exclude_tables:
+  - migrations
+
+watermark_column: updated_at
+dry_run: false
